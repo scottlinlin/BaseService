@@ -1,5 +1,7 @@
 
 #import "Base64.h"
+#import <CommonCrypto/CommonCryptor.h>
+#import <CommonCrypto/CommonKeyDerivation.h>
 
 #define     LocalStr_None           @""
 

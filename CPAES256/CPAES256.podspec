@@ -14,5 +14,6 @@ Pod::Spec.new do |s|
   s.source_files  = "CPAES256/*.{h,m}"
   s.public_header_files = "CPAES256/*.h"
   s.requires_arc = true
+  s.dependency 'CPBase64', '0.0.1'
 
 end

@@ -7,6 +7,8 @@
 //
 
 #import "NSData+AES256.h"
+#import <CommonCrypto/CommonDigest.h>
+#import <CommonCrypto/CommonCryptor.h>
 
 @implementation NSData(AES256)
 
