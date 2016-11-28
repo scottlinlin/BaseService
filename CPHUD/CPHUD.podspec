@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
     s.platform     = :ios, "7.0"
     s.source       = { :git => "https://github.com/scottlinlin/BaseService/tree/master/CPHUD", :tag => s.version.to_s}
     s.source_files  = "**/*.{h,m}"
-    s.public_header_files = "CPHUD/**/*.h"
+    s.public_header_files = "**/*.h"
     s.requires_arc = true
     s.dependency  'MBProgressHUD',        '0.9.1'
 
