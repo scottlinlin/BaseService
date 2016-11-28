@@ -14,5 +14,5 @@ Pod::Spec.new do |s|
   s.source_files  = "CPModelDefine/*.{h,m}"
   s.public_header_files = "CPModelDefine/*.h"
   s.requires_arc = true
-
+  s.dependency 'CPCXSignal', '0.0.1'
 end
