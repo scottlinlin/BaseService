@@ -9,6 +9,8 @@
 #import "NSString+AES256.h"
 #import "NSData+AES256.h"
 #import "Base64.h"
+#import <CommonCrypto/CommonDigest.h>
+#import <CommonCrypto/CommonCryptor.h>
 
 @implementation NSString(AES256)
 

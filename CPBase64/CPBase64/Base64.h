@@ -1,7 +1,6 @@
 
 #import <Foundation/Foundation.h>
-#import <CommonCrypto/CommonCryptor.h>
-#import <CommonCrypto/CommonKeyDerivation.h>
+
 
 
 #define __BASE64( text )        [Base64 base64StringFromText:text]
