@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "Postbe"
-  s.version      = "0.3"
+  s.version      = "0.0.1"
   s.summary      = "Postbe通用类"
 
   # This description is used to generate tags and improve search results.
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
                    通用Postbe
                    DESC
 
-  s.homepage     = "http://192.168.0.178/svn/InfoCenter/系统/移动应用/CPCocoaPods/Postbe"
+  s.homepage     = "https://github.com/scottlinlin/BaseService"
   # s.screenshots  = ""
 
 
