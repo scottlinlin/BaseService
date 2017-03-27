@@ -44,6 +44,7 @@
     //添加function_id
     NSMutableDictionary *param = [headData mutableCopy];
     [param setObject:functionId forKey:@"function_id"];
+    
     //添加checkvalue
     NSMutableString *checkSeq = [NSMutableString new];
     for (NSString *key in checkKeys) {
@@ -54,23 +55,10 @@
     NSString *checkValue = [PostbeHelper md5_16:checkSeq];
     [param setObject:checkValue forKey:@"checkvalue"];
     
-    
-    
-    // 附加参数
-//    if (userNo.length>0) {
-//        NSMutableDictionary* additionParamTemp = [[NSMutableDictionary alloc] init];
-//        if (additonParam) {
-//            additionParamTemp = [additonParam mutableCopy];
-//        }
-//        [additionParamTemp setObject:userNo forKey:@"userNo"];
-//        additonParam = [additionParamTemp copy];
-//    }
     //添加附加参数
     NSMutableDictionary *additionParamTotal = [[PostbeSetting shareInstance] additionParam];
     [additionParamTotal addEntriesFromDictionary:additionParam];
-    
     [param setObject:[PostbeHelper stringByProcSpecialChar:additionParamTotal] forKey:@"str_array"];
-    
     
     // 将参数转到GET的URL后缀
     NSMutableString *paramSTR = nil;
@@ -87,18 +75,23 @@
                                                                 CFSTR("{},: "),
                                                                 kCFStringEncodingUTF8);
     NSString* encodeParamSTR = (__bridge NSString*)cfstr;
-    NSString* urlString = [NSString stringWithFormat:@"%@?%@", POSTBE_URL, encodeParamSTR];
+    NSString *postUrl = [[PostbeSetting shareInstance] postUrl] ? [[PostbeSetting shareInstance] postUrl] :POSTBE_URL_D ;
+    NSString* urlString = [NSString stringWithFormat:@"%@?%@", postUrl, encodeParamSTR];
     
-#ifndef POSTBE_ON
+#ifndef POSTBE_BATCH_ON
     // 网络请求
-    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] init];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager new];
     manager.responseSerializer.acceptableContentTypes = [manager.responseSerializer.acceptableContentTypes setByAddingObjectsFromSet:[NSSet setWithArray:@[@"text/plain", @"text/html"]]];
-    [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:urlString parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        //发送成功
         NSLog(@"SEND SUCCESS data = %@",encodeParamSTR);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        //缓存数据库中
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        #ifndef POSTBE_BATCH_ON
         NSLog(@"SEND FAILED INSERT DB data = %@",encodeParamSTR);
+        //缓存数据库中
         [[PostbeDB sharedInstance] insertData:encodeParamSTR];
+        #endif
     }];
 #else
     //缓存数据库中
@@ -108,71 +101,6 @@
 }
 
 
-///*!
-// *  @author scott.lin, 16-01-25
-// *
-// *  @brief 获取keychain中的Postbe设备id
-// *  @return Postbe设备id
-// */
-//+(NSString *)getPostbeUID{
-//    //NSString *uid = [Helper getValueByKey:POSTBE_UID];
-//    NSString *uid = [Helper getValueFromKeyChain:POSTBE_UID];
-//    //兼容之前的uid（从userdefault获取）
-//    if (uid.length==0) {
-//        uid = [Helper getValueByKey:POSTBE_UID];
-//    }
-//    //postbe没有缓存，从网络接口获取uid
-//    if ([Helper stringNullOrEmpty:uid] || [uid isEqualToString:DM_DEFAULT_VALUE]) {
-//        [PostbeService getPostbeUIDFromNetQuest];
-//        return @"";
-//    }
-//    return uid;
-//}
-
-///*!
-// *  @author scott.lin, 16-01-25
-// *
-// *  @brief 从网络接口获取Postbe设备id
-// */
-//+(void)getPostbeUIDFromNetQuest{
-//    
-//    NSDictionary *param = @{@"act" : @"get_uid",
-//                            @"key" : @"TTYFUND-CHINAPNR",
-//                            @"mac_id" : [[DeviceIntrospection sharedInstance] uuid]};
-//    
-//    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] initWithBaseURL:[NSURL URLWithString:POSTBE_URL]];
-//    manager.responseSerializer.acceptableContentTypes = [manager.responseSerializer.acceptableContentTypes setByAddingObjectsFromSet:[NSSet setWithArray:@[@"text/plain", @"text/html"]]];
-//    
-//    [manager GET:@""
-//      parameters:param
-//         success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//             NSDictionary *body = responseObject;
-//             if (DictNotNilAndEqualsValue(body, RESPONSE_CODE, @"1")) {
-//                 //                 [Helper saveValue:[body valueForKey:POSTBE_UID] forKey:POSTBE_UID];
-//                 [Helper saveValueToKeyChain:[body valueForKey:POSTBE_UID] forKey:POSTBE_UID];
-//             }
-//         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//             
-//         }
-//     ];
-//}
-//
-//
-//BOOL  DictNotNilAndEqualsValue(id dict, NSString *k, NSString *value){
-//    if ( DictNotNil(dict, k) && [[[dict valueForKey:k] description] isEqualToString:value]) {
-//        return YES;
-//    }
-//    return NO;
-//}
-//
-//BOOL  DictNotNil(id dict, NSString *k){
-//    if (dict!=nil && [dict isKindOfClass:[NSDictionary class]] &&
-//        [dict objectForKey:k]!=nil && [dict objectForKey:k]!=[NSNull null]) {
-//        return YES;
-//    }
-//    return NO;
-//}
-//
 /*!
  *  @author scott.lin, 16-01-27
  *

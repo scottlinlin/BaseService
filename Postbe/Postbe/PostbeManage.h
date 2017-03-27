@@ -1,6 +1,6 @@
 //
 //  PostbeManage.h
-//  TTY
+//  Postbe
 //
 //  Created by scott.lin on 16/1/27.
 //  Copyright © 2016年 ChinaPnR. All rights reserved.
@@ -59,7 +59,7 @@
  */
 -(void)startupWithSendCount:(NSUInteger)count;
 
-
+-(void)configPostUrl:(NSString *)url;
 
 
 @end

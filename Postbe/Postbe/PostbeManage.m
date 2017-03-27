@@ -1,6 +1,6 @@
 //
 //  PostbeManage.m
-//  TTY
+//  Postbe
 //
 //  Created by scott.lin on 16/1/27.
 //  Copyright © 2016年 ChinaPnR. All rights reserved.
@@ -14,7 +14,6 @@ static PostbeManage *instance = nil;
 
 @interface PostbeManage ()<PostbeServiceDelegate>
 @property (nonatomic,strong) NSMutableArray *sendQueue;  /*!<发送postbe数据队列*/
-//@property(atomic,assign)  BOOL isSending;              /*!<是否正在发送，YES正在发送，NO发送完成*/
 @property(nonatomic,strong)NSCondition *conditon;        /*!<条件锁，用于同步批量发送*/
 
 
@@ -90,7 +89,7 @@ static PostbeManage *instance = nil;
  *  @brief 初始化Post管理程序，批量发送数量为默认
  */
 -(void)startup{
-#ifdef POSTBE_ON
+#ifdef POSTBE_BATCH_ON
     [self startupWithSendCount:POSTBE_SEND_COUNT_DEFAULT];
 #endif
 }
@@ -102,7 +101,7 @@ static PostbeManage *instance = nil;
  *  @param count 批量发送的数量
  */
 -(void)startupWithSendCount:(NSUInteger)count{
-#ifdef POSTBE_ON
+#ifdef POSTBE_BATCH_ON
     if (count > POSTBE_SEND_COUNT_MAX) {
         count = POSTBE_SEND_COUNT_MAX;
     }
@@ -121,28 +120,27 @@ static PostbeManage *instance = nil;
     dispatch_async(queue, ^{
         while(YES){
             if (self.sendQueue.count == 0 ) {//访问数据库，读取数据并发送
-                    NSUInteger dbCount = [[PostbeDB sharedInstance] getNum];
-                    if (dbCount >= count) {
-                        [self.conditon lock];
-                        self.sendQueue = [[PostbeDB sharedInstance] getData:count];
-                        NSLog(@"BATCH SEND POSTBE... ");
-                        [PostbeService batchPostbe:self.sendQueue delegate:self];
-                        [self.conditon wait];
-                        [self.conditon unlock];
-                    }
-                }
-                else{//直接批量发送
+                NSUInteger dbCount = [[PostbeDB sharedInstance] getNum];
+                if (dbCount >= count) {
                     [self.conditon lock];
-                     NSLog(@"BATCH SEND POSTBE ... ");
-                    [PostbeService batchPostbe:self.sendQueue delegate:self ];
-                    
+                    self.sendQueue = [[PostbeDB sharedInstance] getData:count];
+                    NSLog(@"BATCH SEND POSTBE... ");
+                    [PostbeService batchPostbe:self.sendQueue delegate:self];
                     [self.conditon wait];
                     [self.conditon unlock];
                 }
             }
-            NSLog(@"SEND THREAD PROCCESSING... ");
-            sleep(1);
-        
+            else{//直接批量发送
+                [self.conditon lock];
+                NSLog(@"BATCH SEND POSTBE ... ");
+                [PostbeService batchPostbe:self.sendQueue delegate:self ];
+                
+                [self.conditon wait];
+                [self.conditon unlock];
+            }
+        }
+        NSLog(@"SEND THREAD PROCCESSING... ");
+        sleep(1);
     });
 }
 
@@ -172,6 +170,10 @@ static PostbeManage *instance = nil;
     [self.conditon signal];
     [self.conditon unlock];
      NSLog(@"BATCH SEND POSTBE FAILED ");
+}
+
+-(void)configPostUrl:(NSString *)url{
+    [PostbeSetting shareInstance].postUrl = url;
 }
 
 

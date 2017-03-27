@@ -35,38 +35,6 @@ static PostbeSetting *instance = nil;
     }
     return self;
 }
-//
-//-(void)initHeadData{
-//    // 日期
-//    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-//    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-//    
-//    //设置默认值
-//    NSString *appAction = @"postbe";
-//    NSString *version = @"";
-//    NSString *appClient = POSTBE_APP_CLIENT;
-//    NSString *appPlatform =  POSTBE_APP_PLATFORM;
-//    NSString *appVersion = [CPDeviceUtil bundleVersion];
-//    //    NSString *hdserial = [[DeviceIntrospection sharedInstance] uuid];
-//    NSString *uid = [[DeviceIntrospection sharedInstance] uuid];
-//    NSString *date = [formatter stringFromDate:[NSDate date]];
-//    NSString *model = [[DeviceIntrospection sharedInstance] platformName];
-//    NSString *merId =  @"";
-//    NSString *userNo =  @"";
-//    
-//    self.headData = [NSMutableDictionary new];
-//    [self.headData setObject:appAction forKey:@"act"];
-//    [self.headData setObject:version forKey:@"version"];
-//    [self.headData setObject:appClient forKey:@"app_client"];
-//    [self.headData setObject:appPlatform forKey:@"app_platform"];
-//    [self.headData setObject:appVersion forKey:@"app_version"];
-//    [self.headData setObject:uid forKey:@"uid"];
-//    [self.headData setObject:date forKey:@"datetime"];
-//    [self.headData setObject:model forKey:@"model"];
-//    [self.headData setObject:merId forKey:@"mer_id"];
-//    [self.headData setObject:userNo forKey:@"user_no"];
-//}
-
 
 
 @end

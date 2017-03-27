@@ -1,6 +1,6 @@
 //
 //  PostbeDB.m
-//  TTY
+//  Postbe
 //
 //  Created by scott.lin on 16/1/27.
 //  Copyright (c) 2016年 ChinaPnR. All rights reserved.
