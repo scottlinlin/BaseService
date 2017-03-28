@@ -123,28 +123,6 @@
     });
     
 
-    NSString *urlString;
-//    AFHTTPRequestOperationManager *manager = [[AFHTTPRequestOperationManager alloc] init];
-//    manager.responseSerializer.acceptableContentTypes = [manager.responseSerializer.acceptableContentTypes setByAddingObjectsFromSet:[NSSet setWithArray:@[@"text/plain", @"text/html"]]];
-//    [manager GET:urlString parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        
-//        // post成功
-//        if (((NSNumber*)[responseObject objectForKey:@"return_code"]).intValue == 1) {
-//            if (delegate && [delegate respondsToSelector:@selector(onBatchPostbeSuccess)]) {
-//                [delegate performSelector:@selector(onBatchPostbeSuccess)];
-//            }
-//        }
-//        else{
-//            if (delegate && [delegate respondsToSelector:@selector(onBatchPostbeFail)]) {
-//                [delegate performSelector:@selector(onBatchPostbeFail)];
-//            }
-//        }
-//        
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        if (delegate && [delegate respondsToSelector:@selector(onBatchPostbeFail)]) {
-//            [delegate performSelector:@selector(onBatchPostbeFail)];
-//        }
-//    }];
 }
 
 
